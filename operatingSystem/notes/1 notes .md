@@ -245,7 +245,65 @@ concurrent : one cpu , parallel : different cpus
 ## Advantage
 
 1. relocate program while running
-2. 
+2. most of the memory of a process is idle
+
+## Implement ways
+ Idea 1 load-time linking   
+  keep the list of the memory references  
+ 1. how to enforce protection : 
+ 2. how to move data during execution(after startup) : 
+ 3. what if no contiguous free region fits program : 
+
+ Idea 2 base + bound registers  
+
+ 1. phys.addr = virt.addr. +base
+ check 0<= virt.addr.<bound else trap to kernel 
+ 2. move a process in memory : change base register
+ 3. context switch: OS must reload/modify base and bound register
+ 
+ advantage: cheap to implement in hardware ; cheap in terms of cycles     
+ disadvantage: growing the memory of a process is expensive ; no way to share code or data
+
+ ## Virtual memory definitions
+
+ 1. programs manipulate **virtual/logical** addresses
+ 2. actual memory uses **physical/real** addresses
+ 3. hardware uses  **Mmeory Management Unit** MMU 
+    + a part of CPU
+    + accessed with privileged instructions
+    + translates from virtual to physical addresses
+    + provides address space
+
+## Segmentation
+
+ 1. let processes have many base/bound registers
+ 2. advantage:
+    multiple segments per process
+    allow sharing :
+
+    disadvantage:
+    + requires translation hardware performance limit
+    + N-byte segment needs N contiguous bytes of physical memory
+    + fragmentation : variable-sized pieces --**external fragmentaion**
+      fixed-sized pieces no external holes but force internal waste**internal fragmentation**
+
+ 3. 
+
+## Page
+  1. divide memory into fixed-size pages
+  2. map virtual pages to physical pages **frame** each process has separate mapping configuration 
+  3. allow os to gain control on certain operations
+  4. trade-offs:
+    + eliminates external fragmentation
+    + simplifies allocation, free, backing storage
+    + average internal fragmentation of 0.5 pages per segment
+       - 
+
+  5. data structure
+    + ***pages are fixed size e.g. 4kb **12bits for 4kb-pages page offset** **page number*****
+    + ***each process has a page table*** maps virtual page number to physical page number VPN to PPN, includes bits for protection, validity.
+    + what happens in the case of a read access and for a write access : 
+
 
 
 
