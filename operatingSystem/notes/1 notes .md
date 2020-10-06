@@ -8,6 +8,18 @@
   - [1 Fragmentation](#1-fragmentation)
   - [2 How to implement a memory allocator](#2-how-to-implement-a-memory-allocator)
   - [3 Beyond simple free lists](#3-beyond-simple-free-lists)
+  - [4 Garbage collection](#4-garbage-collection)
+- [Lecture 3 The memory hierarchy](#lecture-3-the-memory-hierarchy)
+  - [1 Cache](#1-cache)
+  - [2 Memory Hierarchies](#2-memory-hierarchies)
+    - [1 why](#1-why)
+    - [2 examples](#2-examples)
+- [Lecture 4 Threads](#lecture-4-threads)
+  - [1 why threads](#1-why-threads)
+  - [2 Preemptive and cooperative threads](#2-preemptive-and-cooperative-threads)
+  - [3 Kernel threads and user threads](#3-kernel-threads-and-user-threads)
+- [Lecture 5 Virtual Memory](#lecture-5-virtual-memory)
+  - [1 Issues in sharing physical memory](#1-issues-in-sharing-physical-memory)
 # Lecture 1 Introduction
 
 ## 1 Process
@@ -172,7 +184,7 @@ Faster storage cost more per byte and have lower capacity, gaps between memory t
 
 concurrent : one cpu , parallel : different cpus
 
-1. most popular abstraction for aoncurreny: all threads in a process share memory and file descriptors, lower resource comsumption compare to process
+1. most popular abstraction for concurreny: all threads in a process share memory and file descriptors, lower resource comsumption compare to process
 
 2. allows a process to use multiple cpus
 
@@ -182,9 +194,9 @@ concurrent : one cpu , parallel : different cpus
 
 1. preemptive threads:  a thread can be preempted at any time in order to allocate the CPU to another context, thread(the same process), process; ***multiple threads within the same process can run in parallel on multiple CPUs.***
 
-2. cooperative threads : at most a single threads (within a given process) is allowed to run at a given point in time; a thread switch(in process) can only happen when 1.relinquishes the CPU or issues a blocking syscall or terminates.
+2. cooperative threads : at most a single thread (within a given process) is allowed to run at a given point in time; a thread switch(in process) can only happen when ***relinquishes the CPU(yield()) or issues a blocking syscall/terminates.***
 
-3. discuss
+3. discussion
   + preemptive threads cause more "race conditions"
 
   + cooperative threads cannot take advantage of multiple CPUs
@@ -203,8 +215,18 @@ concurrent : one cpu , parallel : different cpus
    + a blocking system call blocks all threads(within the same process)
 
 
+1. N:M threading : hybrid threading
+   N user threads per M kernel threads   
+   + same problem as user threads  
+   + hard to keep the number of kernel   
+   +  threads the same as available CPUs  
 
-
+1. Details
+   + one thread of a program call fork(): only the calling thread is replicated in the child process
+   + one thread of a program call exec(): the program replaces the entire process including all threads 
+   + cancellation : 1 before it has completed 2 asynchronous cancellation 3 deferred cancellation
+   + only a single thread receives a given signal instance within a process
+   + **all threads share the data of the enclosing process** qnd maybe each thread need to have its own copy of certain data.
 # Lecture 5 Virtual Memory
 
 ## 1 Issues in sharing physical memory
